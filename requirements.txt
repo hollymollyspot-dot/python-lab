@@ -1,0 +1,26 @@
+# Генератор сайта
+mkdocs==1.6.1
+mkdocs-material==9.5.44
+mkdocs-material-extensions==1.3.1
+pymdown-extensions==10.12
+
+# Для работы с ноутбуками (только исполнение, без визуального интерфейса)
+nbconvert>=7.16.0
+nbformat>=5.10.0
+
+# Для параметризации
+papermill>=2.6.0
+
+# Для науки и графиков
+numpy>=1.26.4
+pandas>=2.2.0
+scikit-learn>=1.5.0
+matplotlib>=3.9.0
+seaborn>=0.13.0
+
+# Для автоматизации
+nox>=2024.4.15
+click>=8.1.7
+
+# Для версионирования сайта
+mike>=2.1.0
