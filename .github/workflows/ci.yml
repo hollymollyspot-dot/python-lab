@@ -1,0 +1,92 @@
+name: Research site
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      demonstrate_failure:
+        description: 'Intentional strict-build failure for the report'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - run: python -m pip install -r requirements.txt
+      - run: python -m mkdocs build --strict
+
+  build:
+    needs: check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - run: python -m pip install -r requirements.txt
+
+      - name: Generate synthetic data
+        run: python scripts/generate_synthetic_traffic.py
+
+      - name: Run experiment (cached)
+        run: python scripts/run_experiment.py
+
+      - name: Generate results page
+        run: python scripts/generate_results_page.py
+
+      - name: Build site
+        run: python -m mkdocs build --strict --site-dir site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy-pages:
+    needs: build
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Verify published HTML (healthcheck)
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          for attempt in 1 2 3 4 5; do
+            status=$(curl --silent --show-error --location -o /tmp/health.html -w '%{http_code}' "$PAGE_URL") || status=000
+            if [ "$status" = "200" ] && grep -q RESEARCH-SITE-3960-OK /tmp/health.html; then exit 0; fi
+            sleep 5
+          done
+          echo "Healthcheck failed after 5 attempts"
+          exit 1
