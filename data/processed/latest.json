@@ -1,0 +1,11 @@
+{
+  "data_hash": "ee70907ca0e5ced46a95a8f7ceb78f14496375430de8c8bb19fa8a6fe261085e",
+  "accuracy": 0.942,
+  "f1_weighted": 0.941998549963749,
+  "cv_f1_mean": 0.9525721952355737,
+  "cv_f1_std": 0.004318752027381042,
+  "elapsed_seconds": 2.827,
+  "n_samples": 5000,
+  "n_features": 7,
+  "timestamp": "2026-11-17T16:56:00.834753+00:00"
+}

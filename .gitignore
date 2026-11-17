@@ -23,9 +23,9 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Данные (если будут большие)
-data/raw/*.csv
-data/processed/
+# Игнорировать только очень большие файлы
+data/raw/*.parquet
+data/raw/*.gz
 
 # Логи
 *.log

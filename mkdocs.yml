@@ -28,6 +28,7 @@ theme:
 plugins:
   - search:
       lang: ru
+  
 
 markdown_extensions:
   - pymdownx.arithmatex:
@@ -50,4 +51,13 @@ extra_javascript:
   
 nav:
   - Главная: index.md
-  - Результаты (ручной режим): results-manual.md
+  - Результаты (Т2 ручной режим): results-manual.md
+  - Результаты (Р3 авто-ноутбук): results.md
+
+validation:
+  nav:
+    omitted_files: info
+  links:
+    not_found: warn
+    anchors: warn
+    unrecognized_links: warn
