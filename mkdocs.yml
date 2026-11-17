@@ -5,6 +5,8 @@ repo_name: hollymollyspot-dot/python-lab
 
 theme:
   name: material
+  language: ru
+  font: false  # Отключаем Google Fonts для полной автономности (используются системные шрифты)
   palette:
     - scheme: default
       primary: teal
@@ -28,11 +30,10 @@ theme:
 plugins:
   - search:
       lang: ru
-  
 
 markdown_extensions:
   - pymdownx.arithmatex:
-      generic: true
+      generic: true  # Генерирует нативный MathML, не требующий внешних JS-скриптов
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -46,13 +47,12 @@ markdown_extensions:
   - attr_list
   - md_in_html
 
-extra_javascript:
-  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
-  
+# Блок extra_javascript намеренно удален для соответствия требованию автономности без CDN
+
 nav:
   - Главная: index.md
-  - Результаты (Т2 ручной режим): results-manual.md
-  - Результаты (Р3 авто-ноутбук): results.md
+  - Результаты (T2, ручной режим): results-manual.md
+  - Результаты (P3, автоконвейер): results.md
 
 validation:
   nav:
